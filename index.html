@@ -2,9 +2,18 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Inventory PT Shabar Tour</title>
     
+    <!-- PWA & Mobile Fullscreen Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Shabar Tour">
+    <meta name="theme-color" content="#065f46">
+    <link rel="manifest" id="dynamic-manifest">
+    <link rel="apple-touch-icon" href="https://placehold.co/192x192/065f46/ffffff?text=ST">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,7 +28,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; -webkit-tap-highlight-color: transparent; }
         .hide { display: none !important; }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         
@@ -43,6 +52,18 @@
     </div>
 
     <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- PWA Install Banner (Shown when app can be installed) -->
+    <div id="pwa-install-banner" class="hide fixed bottom-20 left-4 right-4 z-40 bg-emerald-900 text-white p-4 rounded-2xl shadow-2xl flex items-center justify-between border border-emerald-700 animate-fade-in">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white text-emerald-900 flex items-center justify-center font-bold text-lg shadow">ST</div>
+            <div>
+                <p class="font-bold text-sm">Install Aplikasi Shabar Tour</p>
+                <p class="text-xs text-emerald-200">Buka fullscreen seperti aplikasi native di HP Anda.</p>
+            </div>
+        </div>
+        <button id="pwa-install-btn" class="bg-white text-emerald-900 font-bold px-4 py-2 rounded-xl text-xs shadow hover:bg-emerald-50 transition-colors">Install</button>
+    </div>
 
     <div id="login-screen" class="absolute inset-0 z-40 bg-emerald-900 flex items-center justify-center p-4">
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm text-center">
@@ -76,9 +97,8 @@
     </div>
 
     <div id="main-layout" class="hide h-full flex flex-col md:flex-row w-full">
-        <!-- Desktop Sidebar Navigation -->
-        <nav class="bg-emerald-800 text-white hidden md:flex md:w-64 flex-shrink-0 flex-col justify-start border-r border-emerald-900 z-20">
-            <div class="p-6 border-b border-emerald-700/50">
+        <nav class="bg-emerald-800 text-white w-full md:w-64 flex-shrink-0 flex md:flex-col justify-between md:justify-start order-last md:order-first border-t md:border-t-0 border-emerald-900 z-20">
+            <div class="hidden md:block p-6 border-b border-emerald-700/50">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-white p-1 flex items-center justify-center overflow-hidden shadow">
                         <img src="logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/100x100/065f46/ffffff?text=ST'">
@@ -90,56 +110,31 @@
                 </div>
             </div>
             
-            <div class="flex flex-col w-full p-4 gap-2">
-                <button onclick="app.navigate('dashboard')" class="nav-btn active flex items-center justify-start gap-3 p-3 rounded-lg hover:bg-emerald-700 transition-colors text-sm">
-                    <i class="fa-solid fa-chart-pie text-base"></i> <span class="block">Dashboard</span>
+            <div class="flex md:flex-col w-full md:w-auto p-2 md:p-4 gap-1 md:gap-2">
+                <button onclick="app.navigate('dashboard')" class="nav-btn active flex-1 md:flex-none flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-emerald-700 transition-colors text-xs md:text-sm">
+                    <i class="fa-solid fa-chart-pie text-lg md:text-base"></i> <span class="block">Dashboard</span>
                 </button>
-                <button onclick="app.navigate('items')" class="nav-btn flex items-center justify-start gap-3 p-3 rounded-lg hover:bg-emerald-700 transition-colors text-sm">
-                    <i class="fa-solid fa-box-open text-base"></i> <span class="block">Barang</span>
+                <button onclick="app.navigate('items')" class="nav-btn flex-1 md:flex-none flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-emerald-700 transition-colors text-xs md:text-sm">
+                    <i class="fa-solid fa-box-open text-lg md:text-base"></i> <span class="block">Barang</span>
                 </button>
-                <button onclick="app.navigate('scan')" class="nav-btn flex items-center justify-start gap-3 p-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 shadow-lg transition-colors text-sm">
-                    <i class="fa-solid fa-qrcode text-base"></i> <span class="block font-semibold">Scan QR</span>
+                <button onclick="app.navigate('scan')" class="nav-btn flex-1 md:flex-none flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-2 md:p-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 shadow-lg transition-colors text-xs md:text-sm">
+                    <i class="fa-solid fa-qrcode text-lg md:text-base"></i> <span class="block font-semibold">Scan QR</span>
                 </button>
-                <button onclick="app.navigate('history')" class="nav-btn flex items-center justify-start gap-3 p-3 rounded-lg hover:bg-emerald-700 transition-colors text-sm">
-                    <i class="fa-solid fa-clock-rotate-left text-base"></i> <span class="block">Riwayat</span>
+                <button onclick="app.navigate('history')" class="nav-btn flex-1 md:flex-none flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-emerald-700 transition-colors text-xs md:text-sm">
+                    <i class="fa-solid fa-clock-rotate-left text-lg md:text-base"></i> <span class="block">Riwayat</span>
                 </button>
-                <button onclick="app.logout()" class="flex items-center justify-start gap-3 p-3 rounded-lg hover:bg-red-600 transition-colors text-sm mt-auto text-emerald-200 hover:text-white">
-                    <i class="fa-solid fa-right-from-bracket text-base"></i> <span class="block">Keluar</span>
+                <button onclick="app.logout()" class="hidden md:flex flex-1 md:flex-none flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-red-600 transition-colors text-xs md:text-sm mt-auto text-emerald-200 hover:text-white">
+                    <i class="fa-solid fa-right-from-bracket text-lg md:text-base"></i> <span class="block">Keluar</span>
                 </button>
             </div>
         </nav>
 
-        <!-- Main Content Area -->
         <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8 relative">
-            <!-- Mobile Header with Three-Dot Menu -->
-            <header class="md:hidden flex justify-between items-center bg-white p-4 -m-4 mb-4 shadow-sm relative">
+            <header class="md:hidden flex justify-between items-center bg-white p-4 -m-4 mb-4 shadow-sm">
                 <div class="flex items-center gap-2 text-emerald-800">
-                    <h2 class="font-bold">Shabar Tour</h2>
+                    <h2 class="font-bold">Shabar Tour PWA</h2>
                 </div>
-                <div class="relative">
-                    <button onclick="app.toggleMobileMenu(event)" class="text-gray-600 hover:text-emerald-800 p-2 focus:outline-none">
-                        <i class="fa-solid fa-ellipsis-vertical text-xl"></i>
-                    </button>
-                    <!-- Mobile Dropdown Menu -->
-                    <div id="mobile-dropdown-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1 hide z-50 animate-fade-in">
-                        <button onclick="app.navigate('dashboard'); app.closeMobileMenu();" class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 flex items-center gap-3">
-                            <i class="fa-solid fa-chart-pie w-4"></i> Dashboard
-                        </button>
-                        <button onclick="app.navigate('items'); app.closeMobileMenu();" class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 flex items-center gap-3">
-                            <i class="fa-solid fa-box-open w-4"></i> Barang
-                        </button>
-                        <button onclick="app.navigate('scan'); app.closeMobileMenu();" class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 flex items-center gap-3">
-                            <i class="fa-solid fa-qrcode w-4"></i> Scan QR
-                        </button>
-                        <button onclick="app.navigate('history'); app.closeMobileMenu();" class="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 flex items-center gap-3">
-                            <i class="fa-solid fa-clock-rotate-left w-4"></i> Riwayat
-                        </button>
-                        <div class="border-t border-gray-100 my-1"></div>
-                        <button onclick="app.logout(); app.closeMobileMenu();" class="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-3">
-                            <i class="fa-solid fa-right-from-bracket w-4"></i> Keluar
-                        </button>
-                    </div>
-                </div>
+                <button onclick="app.logout()" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-power-off"></i></button>
             </header>
 
             <div id="view-dashboard" class="view-section animate-fade-in">
@@ -263,6 +258,8 @@
         const ITEMS_PATH = 'items';
         const TRX_PATH = 'transactions';
 
+        let deferredPrompt = null;
+
         const app = {
             userRole: 'admin',
             userId: null,
@@ -273,6 +270,7 @@
             unsubTrx: null,
 
             init() {
+                this.setupPWA();
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         this.userId = user.uid;
@@ -287,26 +285,52 @@
                         document.getElementById('login-screen').classList.remove('hide');
                     }
                 });
+            },
 
-                // Close mobile dropdown when clicking outside
-                document.addEventListener('click', (e) => {
-                    const dropdown = document.getElementById('mobile-dropdown-menu');
-                    const btn = e.target.closest('button');
-                    if (dropdown && !dropdown.classList.contains('hide') && !dropdown.contains(e.target) && (!btn || !btn.getAttribute('onclick')?.includes('toggleMobileMenu'))) {
-                        dropdown.classList.add('hide');
+            setupPWA() {
+                // Generate Dynamic Manifest Blob URL for PWA Fullscreen standalone mode
+                const manifestData = {
+                    "name": "Inventory PT Shabar Tour",
+                    "short_name": "ShabarTour",
+                    "start_url": window.location.href,
+                    "display": "standalone",
+                    "background_color": "#ffffff",
+                    "theme_color": "#065f46",
+                    "icons": [
+                        {
+                            "src": "https://placehold.co/192x192/065f46/ffffff?text=ST",
+                            "sizes": "192x192",
+                            "type": "image/png"
+                        },
+                        {
+                            "src": "https://placehold.co/512x512/065f46/ffffff?text=ST",
+                            "sizes": "512x512",
+                            "type": "image/png"
+                        }
+                    ]
+                };
+                const stringified = JSON.stringify(manifestData);
+                const blob = new Blob([stringified], {type: 'application/json'});
+                document.getElementById('dynamic-manifest').setAttribute('href', URL.createObjectURL(blob));
+
+                // Capture PWA install prompt
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    document.getElementById('pwa-install-banner').classList.remove('hide');
+                });
+
+                document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            this.toast("Aplikasi sedang diinstal...", "success");
+                        }
+                        deferredPrompt = null;
+                        document.getElementById('pwa-install-banner').classList.add('hide');
                     }
                 });
-            },
-
-            toggleMobileMenu(event) {
-                event.stopPropagation();
-                const dropdown = document.getElementById('mobile-dropdown-menu');
-                dropdown.classList.toggle('hide');
-            },
-
-            closeMobileMenu() {
-                const dropdown = document.getElementById('mobile-dropdown-menu');
-                if (dropdown) dropdown.classList.add('hide');
             },
 
             toast(msg, type = 'info') {
@@ -429,8 +453,7 @@
 
             renderItems() {
                 const tbody = document.getElementById('items-table-body');
-                const searchInput = document.getElementById('search-item');
-                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+                const searchTerm = document.getElementById('search-item').value.toLowerCase();
                 const filtered = this.items.filter(i => i.name.toLowerCase().includes(searchTerm) || i.category.toLowerCase().includes(searchTerm));
 
                 if (filtered.length === 0) {
@@ -587,25 +610,17 @@
             },
 
             startScanner() {
-                const overlay = document.getElementById('qr-overlay');
-                if (overlay) overlay.classList.add('hide');
+                document.getElementById('qr-overlay').classList.add('hide');
                 this.scanner = new Html5Qrcode("qr-reader");
                 this.scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (text) => {
                     this.scanner.pause(true);
                     this.handleScanResult(text);
-                }).catch(() => {
-                    const ov = document.getElementById('qr-overlay');
-                    if (ov) ov.classList.remove('hide');
-                });
+                }).catch(() => document.getElementById('qr-overlay').classList.remove('hide'));
             },
 
             stopScanner() {
                 if (this.scanner && this.scanner.isScanning) {
-                    this.scanner.stop().then(() => { 
-                        this.scanner.clear(); 
-                        const ov = document.getElementById('qr-overlay');
-                        if (ov) ov.classList.remove('hide'); 
-                    }).catch(e => {});
+                    this.scanner.stop().then(() => { this.scanner.clear(); document.getElementById('qr-overlay')?.classList.remove('hide'); }).catch(e => {});
                 }
             },
 
@@ -621,12 +636,9 @@
             resumeScanner() { if (this.scanner) this.scanner.resume(); },
 
             async processTransaction(itemId, itemName, currentStock) {
-                const checkedRadio = document.querySelector('input[name="trx_type"]:checked');
-                const type = checkedRadio ? checkedRadio.value : 'KELUAR';
-                const qtyInput = document.getElementById('trx-qty');
-                const qty = qtyInput ? parseInt(qtyInput.value) || 0 : 0;
-                const noteInput = document.getElementById('trx-note');
-                const note = noteInput ? noteInput.value.trim() : '';
+                const type = document.querySelector('input[name="trx_type"]:checked').value;
+                const qty = parseInt(document.getElementById('trx-qty').value) || 0;
+                const note = document.getElementById('trx-note').value.trim();
 
                 if (qty <= 0) return this.toast("Jumlah tidak valid", "warning");
                 let newStock = currentStock;
