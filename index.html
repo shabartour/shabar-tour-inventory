@@ -2,32 +2,36 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Inventory PT Shabar Tour</title>
     
+    <!-- PWA Meta Tags & Manifest -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Shabar Tour">
+    <meta name="theme-color" content="#065f46">
+    <link rel="manifest" href='data:application/json;charset=utf-8,%7B%22name%22%3A%22Inventory%20PT%20Shabar%20Tour%22%2C%22short_name%22%3A%22ShabarTour%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f3f4f6%22%2C%22theme_color%22%3A%22%065f46%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fplacehold.co%2F192x192%2F065f46%2Fffffff%3Ftext%3DST%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fplacehold.co%2F512x512%2F065f46%2Fffffff%3Ftext%3DST%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D'>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- QR Code & Scanner Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
-    <!-- Export Libraries: SheetJS (Excel) & jsPDF (PDF) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .hide { display: none !important; }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+        /* Animation */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     </style>
@@ -47,7 +51,7 @@
     <div id="login-screen" class="absolute inset-0 z-40 bg-emerald-900 flex items-center justify-center p-4">
         <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm text-center">
             <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden border border-emerald-200">
-                <img src="logo.png" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/065f46/ffffff?text=ST'">
+                <img src="logo.png" alt="Logo Shabar Tour" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/065f46/ffffff?text=ST'">
             </div>
             <h1 class="text-2xl font-bold text-gray-900 mb-1">PT Shabar Tour</h1>
             <p class="text-sm text-gray-500 mb-6">Sistem Manajemen Inventaris</p>
@@ -72,15 +76,17 @@
                     <i class="fa-solid fa-right-to-bracket"></i> Masuk Sistem
                 </button>
             </form>
+            <p class="text-[11px] text-gray-400 mt-4">Gunakan email/password yang sudah didaftarkan di Firebase Console Authentication.</p>
         </div>
     </div>
 
     <div id="main-layout" class="hide h-full flex flex-col md:flex-row w-full">
+        
         <nav class="bg-emerald-800 text-white w-full md:w-64 flex-shrink-0 flex md:flex-col justify-between md:justify-start order-last md:order-first border-t md:border-t-0 border-emerald-900 z-20">
             <div class="hidden md:block p-6 border-b border-emerald-700/50">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-lg bg-white p-1 flex items-center justify-center overflow-hidden shadow">
-                        <img src="logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/100x100/065f46/ffffff?text=ST'">
+                        <img src="logo.png" alt="Logo Shabar Tour" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/100x100/065f46/ffffff?text=ST'">
                     </div>
                     <div>
                         <h2 class="font-bold text-lg leading-tight">Shabar Tour</h2>
@@ -109,8 +115,10 @@
         </nav>
 
         <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8 relative">
+            
             <header class="md:hidden flex justify-between items-center bg-white p-4 -m-4 mb-4 shadow-sm">
                 <div class="flex items-center gap-2 text-emerald-800">
+                    <img src="logo.png" alt="Logo" class="w-7 h-7 object-contain" onerror="this.src='https://placehold.co/100x100/065f46/ffffff?text=ST'">
                     <h2 class="font-bold">Shabar Tour</h2>
                 </div>
                 <button onclick="app.logout()" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-power-off"></i></button>
@@ -132,6 +140,7 @@
                         <div><p class="text-sm text-gray-500">Transaksi Keluar</p><p class="text-2xl font-bold text-gray-800" id="stat-out">0</p></div>
                     </div>
                 </div>
+                
                 <h3 class="text-lg font-bold text-gray-800 mb-4">Peringatan Stok Menipis</h3>
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <ul id="low-stock-list" class="divide-y divide-gray-100">
@@ -143,13 +152,19 @@
             <div id="view-items" class="view-section hide animate-fade-in">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <h2 class="text-2xl font-bold text-gray-800">Master Barang</h2>
-                    <button onclick="app.openAddItemModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors admin-only shadow-sm">
-                        <i class="fa-solid fa-plus mr-1"></i> Tambah Barang
-                    </button>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <button onclick="app.openAddItemModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex-1 md:flex-none admin-only shadow-sm">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Barang
+                        </button>
+                    </div>
                 </div>
+
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-4 border-b border-gray-100">
-                        <input type="text" id="search-item" placeholder="Cari koper, ihram, dll..." class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500" oninput="app.renderItems()">
+                    <div class="p-4 border-b border-gray-100 flex gap-2">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-gray-400"></i>
+                            <input type="text" id="search-item" placeholder="Cari koper, ihram, dll..." class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" oninput="app.renderItems()">
+                        </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm whitespace-nowrap">
@@ -172,11 +187,14 @@
             <div id="view-scan" class="view-section hide animate-fade-in h-full flex flex-col">
                 <h2 class="text-2xl font-bold text-gray-800 mb-2">Scan QR Code Barang</h2>
                 <p class="text-gray-500 text-sm mb-6">Arahkan kamera ke stiker QR Code pada koper/barang jamaah.</p>
+                
                 <div class="flex-1 bg-black rounded-2xl overflow-hidden relative shadow-lg max-w-lg w-full mx-auto flex items-center justify-center">
                     <div id="qr-reader" class="w-full h-full bg-black"></div>
                     <div id="qr-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 bg-opacity-80 text-white z-10">
                         <i class="fa-solid fa-camera text-4xl mb-4 text-emerald-400"></i>
-                        <button onclick="app.startScanner()" class="bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-full font-medium transition-colors shadow-lg">Mulai Kamera</button>
+                        <button onclick="app.startScanner()" class="bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-full font-medium transition-colors shadow-lg">
+                            Mulai Kamera
+                        </button>
                     </div>
                 </div>
             </div>
@@ -184,14 +202,9 @@
             <div id="view-history" class="view-section hide animate-fade-in">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <h2 class="text-2xl font-bold text-gray-800">Riwayat Transaksi</h2>
-                    <div class="flex gap-2 flex-wrap">
-                        <button onclick="app.downloadExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
-                            <i class="fa-solid fa-file-excel"></i> Download Excel (.xlsx)
-                        </button>
-                        <button onclick="app.downloadPDF()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
-                            <i class="fa-solid fa-file-pdf"></i> Download PDF (.pdf)
-                        </button>
-                    </div>
+                    <button onclick="app.downloadReport()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-download"></i> Download Laporan (CSV)
+                    </button>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="overflow-x-auto">
@@ -213,6 +226,7 @@
                     </div>
                 </div>
             </div>
+
         </main>
     </div>
 
@@ -247,12 +261,27 @@
             unsubTrx: null,
 
             init() {
+                // Register Service Worker for PWA Fullscreen capability
+                if ('serviceWorker' in navigator) {
+                    const swCode = `
+                        self.addEventListener('install', (e) => self.skipWaiting());
+                        self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
+                        self.addEventListener('fetch', (e) => {
+                            e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                        });
+                    `;
+                    const blob = new Blob([swCode], { type: 'text/javascript' });
+                    const swUrl = URL.createObjectURL(blob);
+                    navigator.serviceWorker.register(swUrl).catch(err => console.log('SW error:', err));
+                }
+
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         this.userId = user.uid;
                         document.getElementById('login-screen').classList.add('hide');
                         document.getElementById('main-layout').classList.remove('hide');
                         document.getElementById('user-role-display').textContent = this.userRole === 'admin' ? 'Administrator' : 'Staf Lapangan';
+                        
                         this.applyRoleUI();
                         this.initDataListeners();
                         this.navigate('dashboard');
@@ -303,7 +332,7 @@
                     this.toast("Berhasil masuk ke sistem", "success");
                 } catch (error) {
                     console.error("Auth error:", error);
-                    this.toast("Gagal login! Periksa kembali email dan kata sandi Anda.", "error");
+                    this.toast("Gagal login! Periksa kembali email dan kata sandi Anda di Firebase.", "error");
                 }
             },
             
@@ -325,6 +354,7 @@
 
             navigate(viewId) {
                 if (viewId !== 'scan') this.stopScanner();
+
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hide'));
                 document.getElementById(`view-${viewId}`).classList.remove('hide');
                 
@@ -347,7 +377,7 @@
                     this.items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     this.renderDashboard();
                     this.renderItems();
-                });
+                }, (error) => { console.error("Error items listener", error); });
 
                 const qTrx = query(collection(db, TRX_PATH));
                 this.unsubTrx = onSnapshot(qTrx, (snapshot) => {
@@ -355,13 +385,17 @@
                         .sort((a, b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0));
                     this.renderDashboard();
                     this.renderHistory();
-                });
+                }, (error) => { console.error("Error transactions listener", error); });
             },
 
             renderDashboard() {
                 document.getElementById('stat-total-items').textContent = this.items.length;
-                document.getElementById('stat-in').textContent = this.transactions.filter(t => t.type === 'MASUK').length;
-                document.getElementById('stat-out').textContent = this.transactions.filter(t => t.type === 'KELUAR').length;
+                
+                const inCount = this.transactions.filter(t => t.type === 'MASUK').length;
+                const outCount = this.transactions.filter(t => t.type === 'KELUAR').length;
+                
+                document.getElementById('stat-in').textContent = inCount;
+                document.getElementById('stat-out').textContent = outCount;
 
                 const lowStockList = document.getElementById('low-stock-list');
                 const lowStocks = this.items.filter(i => Number(i.stock) <= Number(i.minStock || 5));
@@ -373,9 +407,15 @@
                         <li class="p-4 flex justify-between items-center bg-red-50/50">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div>
-                                <div><p class="font-medium text-gray-800">${item.name}</p><p class="text-xs text-gray-500">Kategori: ${item.category}</p></div>
+                                <div>
+                                    <p class="font-medium text-gray-800">${item.name}</p>
+                                    <p class="text-xs text-gray-500">Kategori: ${item.category}</p>
+                                </div>
                             </div>
-                            <div class="text-right"><p class="font-bold text-red-600">${item.stock} ${item.unit}</p></div>
+                            <div class="text-right">
+                                <p class="font-bold text-red-600">${item.stock} ${item.unit}</p>
+                                <p class="text-xs text-gray-500">Min: ${item.minStock}</p>
+                            </div>
                         </li>
                     `).join('');
                 }
@@ -393,15 +433,21 @@
 
                 tbody.innerHTML = filtered.map(item => `
                     <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="px-6 py-4"><p class="font-medium text-gray-800">${item.name}</p><p class="text-xs text-gray-400 font-mono text-[10px]">ID: ${item.id}</p></td>
+                        <td class="px-6 py-4">
+                            <p class="font-medium text-gray-800">${item.name}</p>
+                            <p class="text-xs text-gray-400 font-mono mt-1 text-[10px]">ID: ${item.id}</p>
+                        </td>
                         <td class="px-6 py-4 text-gray-600">${item.category}</td>
-                        <td class="px-6 py-4"><span class="${item.stock <= item.minStock ? 'text-red-600 font-bold' : 'text-gray-800 font-medium'}">${item.stock}</span> <span class="text-gray-500 text-xs">${item.unit}</span></td>
+                        <td class="px-6 py-4">
+                            <span class="${item.stock <= item.minStock ? 'text-red-600 font-bold' : 'text-gray-800 font-medium'}">${item.stock}</span> 
+                            <span class="text-gray-500 text-xs">${item.unit}</span>
+                        </td>
                         <td class="px-6 py-4 text-right space-x-1">
-                            <button onclick="app.openTransactionModal('${item.id}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded text-xs font-semibold transition-colors"><i class="fa-solid fa-arrows-up-down mr-1"></i> Transaksi</button>
+                            <button onclick="app.openTransactionModal('${item.id}')" class="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded text-xs font-semibold transition-colors" title="Catat Transaksi Masuk/Keluar"><i class="fa-solid fa-arrows-up-down mr-1"></i> Transaksi</button>
                             <button onclick="app.showQR('${item.id}', '${item.name}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Lihat QR Code"><i class="fa-solid fa-qrcode"></i></button>
                             ${this.userRole === 'admin' ? `
-                                <button onclick="app.openEditItemModal('${item.id}')" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="app.confirmDeleteItem('${item.id}')" class="p-2 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>
+                                <button onclick="app.openEditItemModal('${item.id}')" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded" title="Edit Master Barang"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="app.confirmDeleteItem('${item.id}')" class="p-2 text-red-600 hover:bg-red-50 rounded" title="Hapus"><i class="fa-solid fa-trash"></i></button>
                             ` : ''}
                         </td>
                     </tr>
@@ -418,28 +464,41 @@
                         <p class="font-bold text-lg text-emerald-800">${item.name}</p>
                         <p class="text-sm text-gray-600">Stok Saat Ini: <b>${item.stock} ${item.unit}</b></p>
                     </div>
+                    
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-1">Jenis Transaksi</label>
                             <div class="flex gap-2">
                                 <label class="flex-1 cursor-pointer">
                                     <input type="radio" name="trx_type" value="KELUAR" checked class="peer sr-only">
-                                    <div class="text-center py-2 px-3 border rounded-lg peer-checked:bg-red-50 peer-checked:border-red-500 peer-checked:text-red-700 text-sm font-medium">Barang Keluar</div>
+                                    <div class="text-center py-2 px-3 border rounded-lg peer-checked:bg-red-50 peer-checked:border-red-500 peer-checked:text-red-700 hover:bg-gray-50 transition-colors text-sm font-medium">
+                                        <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Barang Keluar
+                                    </div>
                                 </label>
                                 <label class="flex-1 cursor-pointer">
                                     <input type="radio" name="trx_type" value="MASUK" class="peer sr-only">
-                                    <div class="text-center py-2 px-3 border rounded-lg peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 text-sm font-medium">Barang Masuk</div>
+                                    <div class="text-center py-2 px-3 border rounded-lg peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 hover:bg-gray-50 transition-colors text-sm font-medium">
+                                        <i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Barang Masuk
+                                    </div>
                                 </label>
                             </div>
                         </div>
-                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Jumlah</label><input type="number" id="trx-qty" value="1" min="1" class="w-full border rounded p-2 text-sm outline-none"></div>
-                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Keterangan</label><input type="text" id="trx-note" placeholder="Misal: Diberikan ke Jamaah Kloter 2" class="w-full border rounded p-2 text-sm outline-none"></div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Jumlah</label>
+                            <input type="number" id="trx-qty" value="1" min="1" class="w-full border rounded p-2 text-sm focus:ring-1 focus:ring-emerald-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Keterangan (Opsional)</label>
+                            <input type="text" id="trx-note" placeholder="Misal: Diberikan ke Jamaah Kloter 2" class="w-full border rounded p-2 text-sm focus:ring-1 focus:ring-emerald-500 outline-none">
+                        </div>
                     </div>
                 `;
+
                 const actions = `
-                    <button onclick="app.closeModal()" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded text-sm font-medium">Batal</button>
-                    <button onclick="app.processTransaction('${item.id}', '${item.name}', ${item.stock})" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm font-medium">Proses</button>
+                    <button onclick="app.closeModal()" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded text-sm font-medium transition-colors">Batal</button>
+                    <button onclick="app.processTransaction('${item.id}', '${item.name}', ${item.stock})" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm font-medium transition-colors shadow-md">Proses Data</button>
                 `;
+
                 this.showModal("Catat Transaksi Barang", html, actions);
             },
 
@@ -447,18 +506,18 @@
                 if (this.userRole !== 'admin') return;
                 const formHTML = `
                     <div class="space-y-3">
-                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Nama Barang</label><input type="text" id="input-name" class="w-full border rounded p-2 text-sm outline-none"></div>
-                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Kategori</label><input type="text" id="input-cat" placeholder="Koper, Ihram..." class="w-full border rounded p-2 text-sm outline-none"></div>
+                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Nama Barang</label><input type="text" id="input-name" class="w-full border rounded p-2 text-sm focus:ring-1 focus:ring-emerald-500 outline-none"></div>
+                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Kategori</label><input type="text" id="input-cat" placeholder="Koper, Ihram, ATK..." class="w-full border rounded p-2 text-sm focus:ring-1 focus:ring-emerald-500 outline-none"></div>
                         <div class="flex gap-3">
-                            <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Stok</label><input type="number" id="input-stock" value="0" class="w-full border rounded p-2 text-sm outline-none"></div>
-                            <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Min</label><input type="number" id="input-min" value="5" class="w-full border rounded p-2 text-sm outline-none"></div>
+                            <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Stok Awal</label><input type="number" id="input-stock" value="0" class="w-full border rounded p-2 text-sm outline-none"></div>
+                            <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Stok Minimal</label><input type="number" id="input-min" value="5" class="w-full border rounded p-2 text-sm outline-none"></div>
                             <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Satuan</label><input type="text" id="input-unit" value="Pcs" class="w-full border rounded p-2 text-sm outline-none"></div>
                         </div>
                     </div>
                 `;
                 const actions = `
-                    <button onclick="app.closeModal()" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded text-sm">Batal</button>
-                    <button onclick="app.saveNewItem()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm">Simpan</button>
+                    <button onclick="app.closeModal()" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded text-sm font-medium transition-colors">Batal</button>
+                    <button onclick="app.saveNewItem()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm font-medium transition-colors">Simpan Barang</button>
                 `;
                 this.showModal('Tambah Barang Baru', formHTML, actions);
             },
@@ -471,28 +530,38 @@
                 const unit = document.getElementById('input-unit').value.trim();
 
                 if(!name || !cat) return this.toast('Nama dan Kategori wajib diisi!', 'warning');
-                await addDoc(collection(db, ITEMS_PATH), { name, category: cat, stock, minStock, unit, createdAt: serverTimestamp() });
-                this.closeModal();
-                this.toast('Barang berhasil ditambahkan', 'success');
+
+                try {
+                    await addDoc(collection(db, ITEMS_PATH), {
+                        name, category: cat, stock, minStock, unit, createdAt: serverTimestamp()
+                    });
+                    this.closeModal();
+                    this.toast('Barang berhasil ditambahkan', 'success');
+                } catch (e) {
+                    console.error(e);
+                    this.toast('Gagal menyimpan barang ke Firebase', 'error');
+                }
             },
 
             openEditItemModal(id) {
+                if (this.userRole !== 'admin') return;
                 const item = this.items.find(i => i.id === id);
                 if(!item) return;
+
                 const formHTML = `
                     <div class="space-y-3">
                         <div><label class="block text-xs font-medium text-gray-700 mb-1">Nama Barang</label><input type="text" id="edit-name" value="${item.name}" class="w-full border rounded p-2 text-sm outline-none"></div>
                         <div><label class="block text-xs font-medium text-gray-700 mb-1">Kategori</label><input type="text" id="edit-cat" value="${item.category}" class="w-full border rounded p-2 text-sm outline-none"></div>
                         <div class="flex gap-3">
                             <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Stok</label><input type="number" id="edit-stock" value="${item.stock}" class="w-full border rounded p-2 text-sm outline-none"></div>
-                            <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Min</label><input type="number" id="edit-min" value="${item.minStock || 5}" class="w-full border rounded p-2 text-sm outline-none"></div>
+                            <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Stok Minimal</label><input type="number" id="edit-min" value="${item.minStock || 5}" class="w-full border rounded p-2 text-sm outline-none"></div>
                             <div class="flex-1"><label class="block text-xs font-medium text-gray-700 mb-1">Satuan</label><input type="text" id="edit-unit" value="${item.unit || 'Pcs'}" class="w-full border rounded p-2 text-sm outline-none"></div>
                         </div>
                     </div>
                 `;
                 const actions = `
-                    <button onclick="app.closeModal()" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded text-sm">Batal</button>
-                    <button onclick="app.updateItem('${id}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm">Simpan</button>
+                    <button onclick="app.closeModal()" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded text-sm font-medium transition-colors">Batal</button>
+                    <button onclick="app.updateItem('${id}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm font-medium transition-colors">Simpan Perubahan</button>
                 `;
                 this.showModal('Edit Barang', formHTML, actions);
             },
@@ -504,66 +573,107 @@
                 const minStock = parseInt(document.getElementById('edit-min').value) || 0;
                 const unit = document.getElementById('edit-unit').value.trim();
 
-                await updateDoc(doc(db, ITEMS_PATH, id), { name, category, stock, minStock, unit });
-                this.closeModal();
-                this.toast('Perubahan disimpan', 'success');
+                try {
+                    await updateDoc(doc(db, ITEMS_PATH, id), { name, category, stock, minStock, unit });
+                    this.closeModal();
+                    this.toast('Perubahan barang disimpan', 'success');
+                } catch(e) {
+                    console.error(e);
+                    this.toast('Gagal memperbarui barang', 'error');
+                }
             },
 
             async confirmDeleteItem(id) {
+                if (this.userRole !== 'admin') return;
                 const item = this.items.find(i => i.id === id);
                 if(!item) return;
+
                 const actions = `
-                    <button onclick="app.closeModal()" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded text-sm">Batal</button>
-                    <button onclick="app.deleteItem('${id}')" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm">Hapus</button>
+                    <button onclick="app.closeModal()" class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded text-sm font-medium transition-colors">Batal</button>
+                    <button onclick="app.deleteItem('${id}')" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm font-medium transition-colors">Ya, Hapus</button>
                 `;
-                this.showModal('Hapus Barang?', `Yakin ingin menghapus <b>${item.name}</b>?`, actions);
+                this.showModal('Hapus Barang?', `Apakah Anda yakin ingin menghapus <b>${item.name}</b>?`, actions);
             },
 
             async deleteItem(id) {
-                await deleteDoc(doc(db, ITEMS_PATH, id));
-                this.closeModal();
-                this.toast('Barang dihapus', 'success');
+                try {
+                    await deleteDoc(doc(db, ITEMS_PATH, id));
+                    this.closeModal();
+                    this.toast('Barang berhasil dihapus', 'success');
+                } catch(e) {
+                    this.toast('Gagal menghapus barang', 'error');
+                }
             },
 
             showQR(id, name) {
                 const html = `
                     <div class="flex flex-col items-center justify-center py-4">
-                        <div id="qr-code-container" class="bg-white p-4 rounded-xl border mb-4"></div>
-                        <p class="text-xs font-mono text-gray-400">ID: ${id}</p>
+                        <div id="qr-code-container" class="bg-white p-4 rounded-xl border border-gray-200 mb-4 inline-block"></div>
+                        <p class="text-sm text-gray-500 text-center">Scan QR Code ini melalui menu Scan aplikasi.</p>
+                        <p class="text-xs font-mono text-gray-400 mt-2 break-all">ID: ${id}</p>
                     </div>
                 `;
-                this.showModal(`QR Code: ${name}`, html, `<button onclick="app.closeModal()" class="w-full px-4 py-2 bg-gray-100 text-gray-800 rounded text-sm">Tutup</button>`);
+                const actions = `<button onclick="app.closeModal()" class="w-full px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded text-sm font-medium transition-colors">Tutup</button>`;
+                
+                this.showModal(`QR Code: ${name}`, html, actions);
+                
                 setTimeout(() => {
                     document.getElementById("qr-code-container").innerHTML = "";
-                    new QRCode(document.getElementById("qr-code-container"), { text: id, width: 200, height: 200, colorDark : "#065f46" });
+                    new QRCode(document.getElementById("qr-code-container"), {
+                        text: id,
+                        width: 200,
+                        height: 200,
+                        colorDark : "#065f46",
+                        colorLight : "#ffffff",
+                        correctLevel : QRCode.CorrectLevel.H
+                    });
                 }, 100);
             },
 
             startScanner() {
                 document.getElementById('qr-overlay').classList.add('hide');
                 this.scanner = new Html5Qrcode("qr-reader");
-                this.scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (text) => {
-                    this.scanner.pause(true);
-                    this.handleScanResult(text);
-                }).catch(() => document.getElementById('qr-overlay').classList.remove('hide'));
+                
+                const config = { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+                
+                this.scanner.start({ facingMode: "environment" }, config,
+                    (decodedText) => {
+                        this.scanner.pause(true);
+                        this.handleScanResult(decodedText);
+                    },
+                    (errorMessage) => {}
+                ).catch((err) => {
+                    console.error("Camera error:", err);
+                    this.toast("Kamera tidak dapat diakses. Berikan izin akses kamera.", "error");
+                    document.getElementById('qr-overlay').classList.remove('hide');
+                });
             },
 
             stopScanner() {
                 if (this.scanner && this.scanner.isScanning) {
-                    this.scanner.stop().then(() => { this.scanner.clear(); document.getElementById('qr-overlay')?.classList.remove('hide'); }).catch(e => {});
+                    this.scanner.stop().then(() => {
+                        this.scanner.clear();
+                        const overlay = document.getElementById('qr-overlay');
+                        if(overlay) overlay.classList.remove('hide');
+                    }).catch(e => console.log(e));
                 }
             },
 
             handleScanResult(scannedId) {
                 const item = this.items.find(i => i.id === scannedId);
+                
                 if (!item) {
-                    this.showModal("Tidak Dikenal", "QR Code tidak terdaftar dalam database.", `<button onclick="app.resumeScanner(); app.closeModal()" class="px-4 py-2 bg-emerald-600 text-white rounded">Tutup</button>`);
+                    const act = `<button onclick="app.resumeScanner(); app.closeModal()" class="px-4 py-2 bg-emerald-600 text-white rounded">Tutup</button>`;
+                    this.showModal("Barang Tidak Dikenal", "QR Code yang discan tidak terdaftar dalam database inventaris.", act);
                     return;
                 }
+
                 this.openTransactionModal(item.id);
             },
 
-            resumeScanner() { if (this.scanner) this.scanner.resume(); },
+            resumeScanner() {
+                if (this.scanner) this.scanner.resume();
+            },
 
             async processTransaction(itemId, itemName, currentStock) {
                 const type = document.querySelector('input[name="trx_type"]:checked').value;
@@ -571,87 +681,74 @@
                 const note = document.getElementById('trx-note').value.trim();
 
                 if (qty <= 0) return this.toast("Jumlah tidak valid", "warning");
+
                 let newStock = currentStock;
                 if (type === 'KELUAR') {
                     if (qty > currentStock) return this.toast("Stok tidak mencukupi!", "error");
                     newStock -= qty;
-                } else { newStock += qty; }
+                } else {
+                    newStock += qty;
+                }
 
-                await updateDoc(doc(db, ITEMS_PATH, itemId), { stock: newStock });
-                await addDoc(collection(db, TRX_PATH), { itemId, itemName, type, qty, finalStock: newStock, note: note || '-', userRole: this.userRole, userId: this.userId, timestamp: serverTimestamp() });
+                try {
+                    await updateDoc(doc(db, ITEMS_PATH, itemId), { stock: newStock });
 
-                this.toast("Transaksi berhasil disimpan", "success");
-                this.closeModal();
-                this.stopScanner();
+                    await addDoc(collection(db, TRX_PATH), {
+                        itemId,
+                        itemName,
+                        type,
+                        qty,
+                        finalStock: newStock,
+                        note: note || '-',
+                        userRole: this.userRole,
+                        userId: this.userId,
+                        timestamp: serverTimestamp()
+                    });
+
+                    this.toast("Transaksi berhasil disimpan", "success");
+                    this.closeModal();
+                    this.stopScanner();
+                } catch (e) {
+                    console.error(e);
+                    this.toast("Terjadi kesalahan sinkronisasi", "error");
+                }
             },
 
-            downloadExcel() {
-                if (this.transactions.length === 0) return this.toast("Belum ada riwayat transaksi.", "warning");
+            downloadReport() {
+                if (this.transactions.length === 0) {
+                    return this.toast("Belum ada data riwayat transaksi untuk diunduh.", "warning");
+                }
 
-                const data = this.transactions.map(trx => {
+                let csvContent = "data:text/csv;charset=utf-8,Waktu,Nama Barang,Jenis Transaksi,Jumlah,Sisa Stok,Keterangan,Petugas\r\n";
+
+                this.transactions.forEach(trx => {
                     const dateObj = trx.timestamp ? trx.timestamp.toDate() : new Date();
-                    return {
-                        "Waktu": dateObj.toLocaleString('id-ID'),
-                        "Nama Barang": trx.itemName,
-                        "Jenis": trx.type,
-                        "Jumlah": trx.qty,
-                        "Stok Akhir": trx.finalStock,
-                        "Keterangan": trx.note,
-                        "Petugas": trx.userRole || 'Admin'
-                    };
-                });
-
-                const worksheet = XLSX.utils.json_to_sheet(data);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "Riwayat Transaksi");
-                XLSX.writeFile(workbook, `Laporan_ShabarTour_${new Date().toISOString().slice(0,10)}.xlsx`);
-                this.toast("Laporan Excel berhasil diunduh!", "success");
-            },
-
-            downloadPDF() {
-                if (this.transactions.length === 0) return this.toast("Belum ada riwayat transaksi.", "warning");
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(14);
-                doc.setTextColor(6, 95, 70);
-                doc.text("PT Shabar Tour - Laporan Riwayat Transaksi", 14, 18);
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(9);
-                doc.setTextColor(100, 100, 100);
-                doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 25);
-
-                const rows = this.transactions.map(trx => {
-                    const dateObj = trx.timestamp ? trx.timestamp.toDate() : new Date();
-                    return [
-                        dateObj.toLocaleString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'}),
-                        trx.itemName,
-                        trx.type,
-                        (trx.type === 'KELUAR' ? '-' : '+') + trx.qty,
+                    const dateStr = dateObj.toLocaleDateString('id-ID', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
+                    const row = [
+                        `"${dateStr}"`,
+                        `"${trx.itemName}"`,
+                        `"${trx.type}"`,
+                        trx.qty,
                         trx.finalStock,
-                        trx.note,
-                        trx.userRole || 'Admin'
+                        `"${trx.note.replace(/"/g, '""')}"`,
+                        `"${trx.userRole || 'Admin'}"`
                     ];
+                    csvContent += row.join(",") + "\r\n";
                 });
 
-                doc.autoTable({
-                    startY: 32,
-                    head: [['Waktu', 'Barang', 'Jenis', 'Jml', 'Stok', 'Keterangan', 'Petugas']],
-                    body: rows,
-                    theme: 'striped',
-                    headStyles: { fillColor: [6, 95, 70] },
-                    styles: { fontSize: 8, cellPadding: 3 }
-                });
-
-                doc.save(`Laporan_ShabarTour_${new Date().toISOString().slice(0,10)}.pdf`);
-                this.toast("Laporan PDF berhasil diunduh!", "success");
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `Laporan_Inventaris_ShabarTour_${new Date().toISOString().slice(0,10)}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                this.toast("Laporan berhasil diunduh!", "success");
             },
 
             renderHistory() {
                 const tbody = document.getElementById('history-table-body');
+                
                 if (this.transactions.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-500">Belum ada riwayat transaksi.</td></tr>`;
                     return;
@@ -660,12 +757,17 @@
                 tbody.innerHTML = this.transactions.map(trx => {
                     const dateObj = trx.timestamp ? trx.timestamp.toDate() : new Date();
                     const dateStr = dateObj.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
-                    const isOut = trx.type === 'KELUAR';
+                    const isOut = trx.type === 'KELU_AR' || trx.type === 'KELUAR';
+                    
                     return `
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="px-6 py-4 text-xs text-gray-500">${dateStr}</td>
                         <td class="px-6 py-4 font-medium text-gray-800">${trx.itemName}</td>
-                        <td class="px-6 py-4"><span class="px-2 py-1 rounded text-xs font-bold ${isOut ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}">${trx.type}</span></td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-1 rounded text-xs font-bold ${isOut ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}">
+                                ${isOut ? '<i class="fa-solid fa-arrow-down mr-1"></i> KELUAR' : '<i class="fa-solid fa-arrow-up mr-1"></i> MASUK'}
+                            </span>
+                        </td>
                         <td class="px-6 py-4 font-bold ${isOut ? 'text-red-600' : 'text-emerald-600'}">${isOut ? '-' : '+'}${trx.qty}</td>
                         <td class="px-6 py-4 text-gray-600 text-sm max-w-xs truncate" title="${trx.note}">${trx.note}</td>
                         <td class="px-6 py-4 text-xs text-gray-500 capitalize"><i class="fa-solid fa-user text-gray-400 mr-1"></i> ${trx.userRole || 'Admin'}</td>
