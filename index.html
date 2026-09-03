@@ -47,14 +47,14 @@
             const manifest = {
                 "name": "Inventory PT Shabar Tour",
                 "short_name": "Shabar Tour",
-                "start_url": window.location.href,
+                "start_url": ".",
                 "display": "standalone",
                 "background_color": "#f3f4f6",
                 "theme_color": "#065f46",
                 "orientation": "portrait-primary",
                 "icons": [
-                    { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
-                    { "src": "logo.png", "sizes": "512x512", "type": "image/png" }
+                    { "src": "logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+                    { "src": "logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
                 ]
             };
             const manifestString = JSON.stringify(manifest);
@@ -65,10 +65,52 @@
             manifestLink.href = manifestUrl;
             document.head.appendChild(manifestLink);
 
-            // Note: Service Worker registration using blob: URL is blocked in strict environments.
-            // Untuk deploy PWA di hosting asli, buat file 'sw.js' terpisah dan daftarkan:
-            // if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js'); }
+            // 2. Service Worker via Blob (Syarat wajib agar browser mengizinkan install PWA)
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    self.addEventListener('install', (e) => self.skipWaiting());
+                    self.addEventListener('activate', (e) => self.clients.claim());
+                    self.addEventListener('fetch', (e) => {}); // Handler fetch dibutuhkan untuk PWA
+                `;
+                const swBlob = new Blob([swCode], {type: 'application/javascript'});
+                const swUrl = URL.createObjectURL(swBlob);
+                navigator.serviceWorker.register(swUrl).catch(err => console.log('SW Registration failed:', err));
+            }
         })();
+
+        // 3. Menangani PWA Install Prompt (Memunculkan tombol Install App di menu)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Mencegah browser menampilkan prompt default secara tiba-tiba
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Tunggu hingga elemen DOM siap untuk memunculkan tombol
+            const showInstallBtn = setInterval(() => {
+                const installBtn = document.getElementById('install-btn');
+                if (installBtn) {
+                    installBtn.classList.remove('hide');
+                    installBtn.onclick = async () => {
+                        if (deferredPrompt) {
+                            deferredPrompt.prompt();
+                            const { outcome } = await deferredPrompt.userChoice;
+                            if (outcome === 'accepted') {
+                                installBtn.classList.add('hide'); // Sembunyikan setelah berhasil diinstal
+                            }
+                            deferredPrompt = null;
+                        }
+                    };
+                    clearInterval(showInstallBtn);
+                }
+            }, 500);
+        });
+
+        // Sembunyikan tombol jika aplikasi sukses terinstal
+        window.addEventListener('appinstalled', () => {
+            const installBtn = document.getElementById('install-btn');
+            if(installBtn) installBtn.classList.add('hide');
+            console.log('App Installed');
+        });
     </script>
 </head>
 <body class="text-gray-800 antialiased h-screen flex flex-col overflow-hidden">
@@ -141,6 +183,12 @@
                 <button onclick="app.navigate('history')" class="nav-btn flex-1 md:flex-none flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-emerald-700 transition-colors text-xs md:text-sm">
                     <i class="fa-solid fa-clock-rotate-left text-lg md:text-base"></i> <span class="block">Riwayat</span>
                 </button>
+                
+                <!-- Tombol Install PWA -->
+                <button id="install-btn" class="hide flex-1 md:flex-none flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-2 md:p-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-amber-950 transition-colors text-xs md:text-sm md:mt-2 shadow-md">
+                    <i class="fa-solid fa-download text-lg md:text-base"></i> <span class="block font-bold">Install App</span>
+                </button>
+
                 <button onclick="app.logout()" class="hidden md:flex flex-1 md:flex-none flex-col md:flex-row items-center md:justify-start gap-1 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-red-600 transition-colors text-xs md:text-sm mt-auto text-emerald-200 hover:text-white">
                     <i class="fa-solid fa-right-from-bracket text-lg md:text-base"></i> <span class="block">Keluar</span>
                 </button>
